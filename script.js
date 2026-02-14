@@ -249,32 +249,6 @@ function onPlayerError(event) {
     alert("Erreur lecture musique: " + event.data);
 }
 
-// ===== COUNTER / LOVE COUNTER =====
-function initLoveCounter() {
-    const finaleSection = document.querySelector('.finale');
-    if (!finaleSection) return;
-
-    const message = finaleSection.querySelector('.finale-message');
-    if (!message) return;
-
-    const start = new Date('2024-02-14'); // Saint Valentin 2024 start date (example)
-    const now = new Date();
-    const days = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-
-    // Add a counter line
-    const counter = document.createElement('p');
-    counter.style.cssText = `
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 1rem;
-        color: var(--rose-300);
-        margin-top: 1.5rem;
-        opacity: 0.7;
-        letter-spacing: 0.1em;
-    `;
-    counter.textContent = `${days} jours de bonheur avec toi...`;
-    message.after(counter);
-}
-
 // ===== INIT EVERYTHING =====
 document.addEventListener('DOMContentLoaded', () => {
     createFloatingHearts();
@@ -286,7 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initParallax();
     initLetterReveal();
     // initMusicToggle(); // Replaced by YouTube API
-    initLoveCounter();
 
     // Delay typing effect until hero animation is done
     setTimeout(initTypingEffect, 1500);
