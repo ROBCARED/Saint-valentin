@@ -281,6 +281,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start sparkle effect
     initSparkle();
+
+    // Add click heart effect
+    document.addEventListener('click', (e) => {
+        const heart = document.createElement('div');
+        heart.classList.add('floating-heart');
+        heart.innerText = ['❤', '💕', '💖'][Math.floor(Math.random() * 3)];
+        heart.style.left = e.clientX + 'px';
+        heart.style.top = e.clientY + 'px';
+        heart.style.fontSize = '24px';
+        heart.style.position = 'fixed';
+        heart.style.animation = 'floatUp 2s ease-out';
+        heart.style.pointerEvents = 'none';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 2000);
+    });
 });
 
 // ===== Page visibility - pause animations when tab not active =====
