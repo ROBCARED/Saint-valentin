@@ -204,6 +204,7 @@ let isMusicPlaying = false;
 
 // Ensure function is global
 window.onYouTubeIframeAPIReady = function () {
+    console.log("YouTube API Ready");
     player = new YT.Player('youtube-player', {
         height: '1', // Must be non-zero for some mobile browsers
         width: '1',
@@ -212,17 +213,23 @@ window.onYouTubeIframeAPIReady = function () {
             'autoplay': 0,
             'controls': 0,
             'loop': 1,
-            'playlist': 'd748E83m6d4' // Required for loop to work
+            'playlist': 'd748E83m6d4', // Required for loop to work
+            'playsinline': 1 // Important for mobile!
         },
         events: {
-            'onReady': onPlayerReady
+            'onReady': onPlayerReady,
+            'onError': onPlayerError
         }
     });
 }
 
 function onPlayerReady(event) {
+    console.log("Player Ready");
     const btn = document.getElementById('music-toggle');
     if (btn) {
+        // Visual indicator that music is ready
+        btn.style.boxShadow = "0 0 15px #fff";
+
         btn.addEventListener('click', () => {
             if (isMusicPlaying) {
                 player.pauseVideo();
@@ -235,6 +242,11 @@ function onPlayerReady(event) {
             }
         });
     }
+}
+
+function onPlayerError(event) {
+    console.error("Player Error:", event.data);
+    alert("Erreur lecture musique: " + event.data);
 }
 
 // ===== COUNTER / LOVE COUNTER =====
