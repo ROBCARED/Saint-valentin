@@ -2,7 +2,7 @@
 function createFloatingHearts() {
     const container = document.getElementById('hearts-bg');
     const hearts = ['❤', '💕', '💖', '💗', '♥', '💘', '💝'];
-    
+
     setInterval(() => {
         const heart = document.createElement('span');
         heart.classList.add('floating-heart');
@@ -12,7 +12,7 @@ function createFloatingHearts() {
         heart.style.animationDuration = (Math.random() * 8 + 6) + 's';
         heart.style.animationDelay = Math.random() * 2 + 's';
         container.appendChild(heart);
-        
+
         setTimeout(() => heart.remove(), 16000);
     }, 800);
 }
@@ -20,7 +20,7 @@ function createFloatingHearts() {
 // ===== FALLING PETALS IN HERO =====
 function createPetals() {
     const container = document.getElementById('hero-petals');
-    
+
     for (let i = 0; i < 15; i++) {
         const petal = document.createElement('div');
         petal.classList.add('petal');
@@ -52,10 +52,10 @@ function initScrollReveal() {
 
     // Observe reason cards
     document.querySelectorAll('.reason-card').forEach(card => observer.observe(card));
-    
+
     // Observe timeline items
     document.querySelectorAll('.timeline-item').forEach(item => observer.observe(item));
-    
+
     // Observe poem verses
     document.querySelectorAll('.poem-verse').forEach(verse => observer.observe(verse));
 }
@@ -64,7 +64,7 @@ function initScrollReveal() {
 function initActiveNav() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
-    
+
     window.addEventListener('scroll', () => {
         let current = '';
         sections.forEach(section => {
@@ -73,7 +73,7 @@ function initActiveNav() {
                 current = section.getAttribute('id');
             }
         });
-        
+
         navLinks.forEach(link => {
             link.classList.remove('active');
             if (link.getAttribute('href') === '#' + current) {
@@ -86,7 +86,7 @@ function initActiveNav() {
 // ===== NAV BACKGROUND ON SCROLL =====
 function initNavScroll() {
     const nav = document.getElementById('nav');
-    
+
     window.addEventListener('scroll', () => {
         if (window.scrollY > 100) {
             nav.style.background = 'rgba(254, 249, 243, 0.95)';
@@ -101,22 +101,22 @@ function initNavScroll() {
 // ===== SPARKLE CURSOR EFFECT =====
 function initSparkle() {
     let lastSparkle = 0;
-    
+
     document.addEventListener('mousemove', (e) => {
         const now = Date.now();
         if (now - lastSparkle < 80) return;
         lastSparkle = now;
-        
+
         const sparkle = document.createElement('div');
         sparkle.classList.add('sparkle');
         sparkle.style.left = e.clientX + 'px';
         sparkle.style.top = e.clientY + 'px';
-        
+
         const colors = ['#ff6b8a', '#ff8fab', '#ffb3c6', '#d4a574', '#ffd6e0'];
         sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
         sparkle.style.width = (Math.random() * 4 + 3) + 'px';
         sparkle.style.height = sparkle.style.width;
-        
+
         document.body.appendChild(sparkle);
         setTimeout(() => sparkle.remove(), 800);
     });
@@ -125,7 +125,7 @@ function initSparkle() {
 // ===== SMOOTH SCROLL =====
 function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
@@ -154,12 +154,12 @@ function initParallax() {
 function initTypingEffect() {
     const nameEl = document.getElementById('beloved-name');
     if (!nameEl) return;
-    
+
     const text = nameEl.textContent;
     nameEl.textContent = '';
     nameEl.style.opacity = '1';
     nameEl.style.transform = 'translateY(0)';
-    
+
     let i = 0;
     const typeInterval = setInterval(() => {
         if (i < text.length) {
@@ -175,7 +175,7 @@ function initTypingEffect() {
 function initLetterReveal() {
     const letterPaper = document.querySelector('.letter-paper');
     if (!letterPaper) return;
-    
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -184,7 +184,7 @@ function initLetterReveal() {
                     p.style.opacity = '0';
                     p.style.transform = 'translateY(15px)';
                     p.style.transition = `all 0.6s ease ${i * 0.15}s`;
-                    
+
                     setTimeout(() => {
                         p.style.opacity = '1';
                         p.style.transform = 'translateY(0)';
@@ -194,63 +194,60 @@ function initLetterReveal() {
             }
         });
     }, { threshold: 0.2 });
-    
+
     observer.observe(letterPaper);
 }
 
-// ===== MUSIC TOGGLE (ambient audio) =====
-function initMusicToggle() {
-    const btn = document.getElementById('music-toggle');
-    let audioContext, oscillator, gainNode;
-    let isPlaying = false;
+// ===== YOUTUBE MUSIC PLAYER =====
+let player;
+let isMusicPlaying = false;
 
-    btn.addEventListener('click', () => {
-        if (!isPlaying) {
-            // Create a soft ambient tone
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
-            // Create a nice chord
-            const frequencies = [261.63, 329.63, 392.00]; // C Major chord
-            frequencies.forEach((freq, i) => {
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, audioContext.currentTime);
-                gain.gain.setValueAtTime(0.03, audioContext.currentTime);
-                osc.connect(gain);
-                gain.connect(audioContext.destination);
-                osc.start();
-                
-                // Slowly modulate
-                osc.frequency.linearRampToValueAtTime(freq * 1.01, audioContext.currentTime + 4);
-                osc.frequency.linearRampToValueAtTime(freq, audioContext.currentTime + 8);
-            });
-            
-            btn.classList.add('playing');
-            isPlaying = true;
-        } else {
-            if (audioContext) {
-                audioContext.close();
-            }
-            btn.classList.remove('playing');
-            isPlaying = false;
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('youtube-player', {
+        height: '0',
+        width: '0',
+        videoId: 'd748E83m6d4', // Joé Dwèt Filé - Mont blanc
+        playerVars: {
+            'autoplay': 0,
+            'controls': 0,
+            'loop': 1,
+            'playlist': 'd748E83m6d4' // Required for loop to work
+        },
+        events: {
+            'onReady': onPlayerReady
         }
     });
+}
+
+function onPlayerReady(event) {
+    const btn = document.getElementById('music-toggle');
+    if (btn) {
+        btn.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                player.pauseVideo();
+                btn.classList.remove('playing');
+                isMusicPlaying = false;
+            } else {
+                player.playVideo();
+                btn.classList.add('playing');
+                isMusicPlaying = true;
+            }
+        });
+    }
 }
 
 // ===== COUNTER / LOVE COUNTER =====
 function initLoveCounter() {
     const finaleSection = document.querySelector('.finale');
     if (!finaleSection) return;
-    
+
     const message = finaleSection.querySelector('.finale-message');
     if (!message) return;
-    
-    // Calculate days together (you can customize this date)
-    const start = new Date('2024-01-01'); // Customize this!
+
+    const start = new Date('2024-02-14'); // Saint Valentin 2024 start date (example)
     const now = new Date();
     const days = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-    
+
     // Add a counter line
     const counter = document.createElement('p');
     counter.style.cssText = `
@@ -261,7 +258,7 @@ function initLoveCounter() {
         opacity: 0.7;
         letter-spacing: 0.1em;
     `;
-    counter.textContent = `${days} jours d'amour et ce n'est que le début...`;
+    counter.textContent = `${days} jours de bonheur avec toi...`;
     message.after(counter);
 }
 
@@ -275,12 +272,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initSmoothScroll();
     initParallax();
     initLetterReveal();
-    initMusicToggle();
+    // initMusicToggle(); // Replaced by YouTube API
     initLoveCounter();
-    
+
     // Delay typing effect until hero animation is done
     setTimeout(initTypingEffect, 1500);
-    
+
     // Start sparkle effect
     initSparkle();
 });
