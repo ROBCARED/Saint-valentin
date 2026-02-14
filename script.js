@@ -202,10 +202,11 @@ function initLetterReveal() {
 let player;
 let isMusicPlaying = false;
 
-function onYouTubeIframeAPIReady() {
+// Ensure function is global
+window.onYouTubeIframeAPIReady = function () {
     player = new YT.Player('youtube-player', {
-        height: '0',
-        width: '0',
+        height: '1', // Must be non-zero for some mobile browsers
+        width: '1',
         videoId: 'd748E83m6d4', // Joé Dwèt Filé - Mont blanc
         playerVars: {
             'autoplay': 0,
